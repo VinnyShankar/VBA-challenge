@@ -58,7 +58,7 @@ Sub Stocks():
             
             'Store the <vol> sum for the current <ticker>
             'This variable needs to be a Double or the value will overflow since stock volume is a very large integer
-            Dim volsum As Double
+            Dim volsum As LongLong
             volsum = 0
             
             'Store the first <open> of the current <ticker>
@@ -86,7 +86,7 @@ Sub Stocks():
             tickerdecrease = 0
             
             'Store the value of the Greatest Total Volume
-            Dim greatestvol As Double
+            Dim greatestvol As LongLong
             greatestvol = 0
             
             'Store the ticker with the Greatest Total Volume
