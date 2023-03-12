@@ -103,10 +103,6 @@ Sub Stocks():
     
                     'Print the current <ticker> in the Ticker column of table one
                     Cells(tickercount, 9).Value = Cells(a, 1).Value
-            
-                    'Print the (last <close> - first <open>) in the Yearly Change column of table one with the correct format
-                    'Cells(tickercount, 10).Value = Format(Cells(a, 6).Value - Cells(a - 252, 3).Value, "0.00")
-                    'IDEA: use a counter to store the open and subtract the close when a new ticker is found
                     
                     'Print the (last <close> - first <open>) in the Yearly Change column of table one with two decimal places
                     Cells(tickercount, 10).Value = FormatNumber(Cells(a, 6).Value - firstopen, 2)
