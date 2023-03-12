@@ -51,22 +51,46 @@ Sub Stocks():
     
     'Populate table one
     
-        'Count the number of rows in the <ticker> column
+        'Count the number of rows in the dataset
         Dim rowcount As Long
         rowcount = Cells(Rows.Count, 1).End(xlUp).Row
         
-        'Counter to keep track of the row in table one
+        'Keep track of the row in table one
         Dim tickercount As Long
         tickercount = 2
         
-        'Counter to sum the volume for the current <ticker>
-        'This counter needs to be a Double or the value will overflow since stock volume is a very large integer
+        'Store the sum of the volume for the current <ticker>
+        'This variable needs to be a Double or the value will overflow since stock volume is a very large integer
         Dim volcount As Double
         volcount = 0
         
-        'Create a variable to store the value of the first <open>
+        'Store the value of the first <open>
         Dim firstopen As Double
         firstopen = Cells(2, 3).Value
+        
+        'Store the value of the biggest Percentage Change
+        Dim greatestincrease As Double
+        greatestincrease = 0
+        
+        'Store the ticker with the biggest Percentage Change
+        Dim tickerincrease As String
+        tickerincrease = 0
+        
+        'Store the value of the smallest Percentage Change
+        Dim greatestdecrease As Double
+        greatestdecrease = 0
+        
+        'Store the ticker with the smallest Percentage Change
+        Dim tickerdecrease As String
+        tickerdecrease = 0
+        
+        'Store the value of the biggest Total Stock Volume
+        Dim greatestvol As Double
+        greatestvol = 0
+        
+        'Store the ticker with the biggest Total Stock Volume
+        Dim tickervol As String
+        tickervol = Cells(2, 9).Value
     
             'Loop through the rows
             For a = 2 To rowcount
@@ -106,11 +130,42 @@ Sub Stocks():
                     'Print the ((last <close>/first <open>)-1) in the Percentage Change column
                     Cells(tickercount, 11).Value = FormatPercent((Cells(a, 6).Value / firstopen) - 1)
                     
-                    'Set the firstopen index to the first <open> of the new symbol
-                    firstopen = Cells(a + 1, 3).Value
+                        'If the next Percentage Change is bigger than the current biggest Percentage Change
+                        If Cells(tickercount, 11).Value > greatestincrease Then
+                        
+                            'Store the value of the bigger Percentage Change
+                            greatestincrease = Cells(tickercount, 11).Value
+                            
+                            'Store the Ticker with the bigger Percentage Change
+                            tickerincrease = Cells(tickercount, 9).Value
+                        
+                        'Else if the next Percentage Change is smaller than the current smallest Percentage Change
+                        ElseIf Cells(tickercount, 11).Value < greatestdecrease Then
+                        
+                            'Store the value of the smaller Percentage Change
+                            greatestdecrease = Cells(tickercount, 11).Value
+                            
+                            'Store the Ticker with the smaller Percentage Change
+                            tickerdecrease = Cells(tickercount, 9).Value
+            
+                        End If
                     
                     'Print the volume count in the Total Stock Volume Column
                     Cells(tickercount, 12).Value = volcount
+                    
+                        'If the new Total Stock Volume is bigger than the current biggest Total Stock Volume
+                        If Cells(tickercount, 12).Value > greatestvol Then
+                        
+                            'Store the value of the bigger Total Stock Volume
+                            greatestvol = Cells(tickercount, 12).Value
+                            
+                            'Store the value of the new ticker
+                            tickervol = Cells(tickercount, 9).Value
+            
+                        End If
+                        
+                    'Set the firstopen index to the first <open> of the new symbol
+                    firstopen = Cells(a + 1, 3).Value
                     
                     'Set the volume counter to the oldest <open> of the next ticker
                     volcount = 0
@@ -121,6 +176,24 @@ Sub Stocks():
                 End If
                 
             Next a
+            
+        'Print the greatest % increase
+        Range("R2").Value = FormatPercent(greatestincrease)
+            
+        'Print the ticker of the greatest & increase
+        Range("Q2").Value = tickerincrease
+            
+        'Print the greatest % decrease
+        Range("R3").Value = FormatPercent(greatestdecrease)
+            
+        'Print the ticker of the greatest & decrease
+        Range("Q3").Value = tickerdecrease
+        
+        'Print the greatest total volume
+        Range("R4").Value = greatestvol
+        
+        'Print the ticker of the greatest Total Volume
+        Range("Q4").Value = tickervol
     
     'Format table one
             
@@ -132,81 +205,81 @@ Sub Stocks():
     'IDEA: Loop through the column and if the new value is bigger/smaller, keep it; at the end, print the value in the appropriate cell
     
         'Store the greatest Percentage Change increase
-        Dim greatestincrease As Double
-        greatestincrease = Cells(2, 11).Value
+        'Dim greatestincrease As Double
+        'greatestincrease = Cells(2, 11).Value
         
         'Store the greatest increase ticker
-        Dim tickerincrease As String
-        tickerincrease = Cells(2, 9).Value
+        'Dim tickerincrease As String
+        'tickerincrease = Cells(2, 9).Value
         
         'Store the greatest Percentage Change decrease
-        Dim greatestdecrease As Double
-        greatestdecrease = Cells(2, 11).Value
+        'Dim greatestdecrease As Double
+        'greatestdecrease = Cells(2, 11).Value
         
         'Store the greatest decrease ticker
-        Dim tickerdecrease As String
-        tickerdecrease = Cells(2, 9).Value
+        'Dim tickerdecrease As String
+        'tickerdecrease = Cells(2, 9).Value
         
         'Store the greatest total volume
-        Dim greatestvol As Double
-        greatestvol = Cells(2, 12).Value
+        'Dim greatestvol As Double
+        'greatestvol = Cells(2, 12).Value
         
         'Store the greatest total volume ticker
-        Dim tickervol As String
-        tickervol = Cells(2, 9).Value
+        'Dim tickervol As String
+        'tickervol = Cells(2, 9).Value
     
         'Loop through the rows
-        For c = 2 To tickercount
+        'For c = 2 To tickercount
         
             'If the next Yearly Change is bigger than the current Yearly Change, then
-            If Cells(c + 1, 11).Value > greatestincrease Then
+            'If Cells(c + 1, 11).Value > greatestincrease Then
             
             'Store the value of the bigger Year Change
-            greatestincrease = Cells(c + 1, 11).Value
+            'greatestincrease = Cells(c + 1, 11).Value
             
             'Store the value of the new ticker
-            tickerincrease = Cells(c + 1, 9).Value
+            'tickerincrease = Cells(c + 1, 9).Value
             
             'Else if the next Yearly Change is smaller than the current Yearly Change, then
-            ElseIf Cells(c + 1, 11).Value < greatestdecrease Then
+            'ElseIf Cells(c + 1, 11).Value < greatestdecrease Then
             
             'Store the value of the smaller Yearly Change
-            greatestdecrease = Cells(c + 1, 11).Value
+            'greatestdecrease = Cells(c + 1, 11).Value
             
             'Store the value of the new ticker
-            tickerdecrease = Cells(c + 1, 9).Value
+            'tickerdecrease = Cells(c + 1, 9).Value
             
-            End If
+            'End If
             
             'If the next Total Stock Volume is bigger than the current Total Stock Volume
-            If Cells(c + 1, 12).Value > greatestvol Then
+            'If Cells(c + 1, 12).Value > greatestvol Then
             
             'Store the value of the bigger Total Stock Volume
-            greatestvol = Cells(c + 1, 12).Value
+            'greatestvol = Cells(c + 1, 12).Value
             
             'Store the value of the new ticker
-            tickervol = Cells(c + 1, 9).Value
+            'tickervol = Cells(c + 1, 9).Value
             
-            End If
+           ' End If
             
-        Next c
+        'Next c
         
         'Print the greatest % increase
-        Range("R2").Value = FormatPercent(greatestincrease)
+        'Range("R2").Value = FormatPercent(greatestincrease)
         
         'Print the ticker of the greatest & increase
-        Range("Q2").Value = tickerincrease
+        'Range("Q2").Value = tickerincrease
         
         'Print the greatest % decrease
-        Range("R3").Value = FormatPercent(greatestdecrease)
+        'Range("R3").Value = FormatPercent(greatestdecrease)
         
         'Print the ticker of the greatest & decrease
-        Range("Q3").Value = tickerdecrease
+        'Range("Q3").Value = tickerdecrease
         
         'Print the ticker of the greatest Total Volume
-        Range("Q4").Value = tickervol
+        'Range("Q4").Value = tickervol
     
     'Print the biggest Total Stock Volume in table two
-    Range("R4").Value = Application.WorksheetFunction.Max(Range("L2:L91"))
+    'Range("R4").Value = Application.WorksheetFunction.Max(Range("L2:L91"))
 
 End Sub
