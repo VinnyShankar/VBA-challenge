@@ -16,106 +16,9 @@ Sub Reset():
     Range("R2:R3").ClearFormats
 
 End Sub
-Sub StockInfo()
-
-'Print the new column headers
-
-    'Print the Ticker header
-    Range("I1").Value = "Ticker"
-    'Print the Yearly Change header
-    Range("J1").Value = "Yearly Change"
-    'Print the Percentage Change header
-    Range("K1").Value = "Percentage Change"
-    'Print the Total Stock Volume header
-    Range("L1").Value = "Total Stock Volume"
-    
-'Fill the new table
-    
-    'Count the number of used rows
-    Dim rowcount As Long
-    rowcount = Cells(Rows.Count, 1).End(xlUp).Row
-    
-    'Counter to shift by one row whenever a new symbol is found
-    Dim tickercount As Long
-    tickercount = 2
-    
-    'Loop through the rows
-    For i = 2 To rowcount
-    
-        'Whenever the next <ticker> is not the same previous <ticker>
-        If Cells(i, 1).Value <> Cells(i + 1, 1).Value Then
-        
-            'Print the previous <ticker> in the Ticker column
-            Cells(tickercount, 9).Value = Cells(i, 1).Value
-        
-            'Print the (newest <close> - oldest <open>) in the Yearly Change column
-            Cells(tickercount, 10).Value = Cells(i, 6).Value - Cells(i - 252, 3).Value
-        
-            'Print the ((newest <close>/oldest <open>)-1) in the Percentage Change column
-            Cells(tickercount, 11).Value = (Cells(i, 6).Value / Cells(i - 252, 3).Value) - 1
-        
-            'Shift down one row in the new table
-            tickercount = tickercount + 1
-        
-        End If
-        
-    Next i
-
-End Sub
-Sub volume()
-
-'Fill the Total Stock Volume column
-
-    'Count the number of rows in the <ticker> column
-    Dim rowcount As Long
-    rowcount = Cells(Rows.Count, 1).End(xlUp).Row
-    
-    'Counter to shift by one row whenever a new symbol is found
-    Dim tickercount As Long
-    tickercount = 2
-    
-    'Use a counter to sum the volume for the current <ticker>
-    Dim volcount As Double
-    volcount = 0
-
-        'Loop through the rows
-        For a = 2 To rowcount
-    
-            'Whenever the current <ticker> is the same as the next <ticker>
-            If Cells(a, 1).Value = Cells(a + 1, 1).Value Then
-        
-                'Add the <vol> of the current row to
-                volcount = volcount + Cells(a, 7).Value
-        
-                'Otherwise print the volume count in the Total Stock Volume column
-                ElseIf Cells(a, 1).Value <> Cells(a + 1, 1).Value Then
-                
-                'Add the <vol> of the current row to
-                volcount = volcount + Cells(a, 7).Value
-                
-                'Print the volume count in the Total Stock Volume Column
-                Cells(tickercount, 12).Value = volcount
-                
-                'Set the volume counter to the oldest <open> of the next ticker
-                volcount = Cells(a + 2, 7).Value
-                
-                'Shift down by one row in the Total Stock Value Column
-                tickercount = tickercount + 1
-        
-            End If
-        
-        Next a
-
-End Sub
-Sub columnwidthautofit()
-Columns("J:L").AutoFit
-End Sub
-Sub resetcolumnwidth()
-Columns("J:L").ColumnWidth = 8.43
-End Sub
 Sub Stocks()
 
-'Print the new column headers for table one
+'Print the column headers for table one
 
     'Print the Ticker column header
     Range("I1").Value = "Ticker"
@@ -129,7 +32,7 @@ Sub Stocks()
     'Print the Total Stock Volume column header
      Range("L1").Value = "Total Stock Volume"
 
-'Print the new column headers and row headers for table two
+'Print the column headers and row headers for table two
     
     'Print the Ticker column header
     Range("Q1").Value = "Ticker"
