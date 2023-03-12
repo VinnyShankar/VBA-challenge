@@ -6,7 +6,7 @@ Sub Reset():
     ' --------------------------------------------
     For Each ws In Worksheets
 
-    'Reset the worksheet to it's original state
+    'Reset the worksheet to its original state
     
         'Clear the cells
         ws.Columns("I:L").Clear
@@ -61,9 +61,13 @@ Sub Stocks():
             Dim volsum As Double
             volsum = 0
             
-            'Store the value of the first <open> for the current <ticker>
+            'Store the first <open> of the current <ticker>
             Dim firstopen As Double
             firstopen = ws.Cells(2, 3).Value
+            
+            'Store the last <close> of the current <ticker>
+            Dim lastclose As Double
+            lastclose = 0
             
             'Store the value of the Greatest % Increase
             Dim greatestincrease As Double
@@ -101,10 +105,13 @@ Sub Stocks():
                         'Print the current <ticker> in the Ticker column of table one
                         ws.Cells(tickercount, 9).Value = ws.Cells(a, 1).Value
                         
+                        'Store the last <close> of the current <ticker>
+                        lastclose = ws.Cells(a, 6).Value
+                        
                         'Calculate the Yearly Change using this formla:  Yearly Change = (last <close> - first <open>)
                         'Format the result by giving it two decimal places
                         'Print the result in the Yearly Change column of table one
-                        ws.Cells(tickercount, 10).Value = FormatNumber(ws.Cells(a, 6).Value - firstopen, 2)
+                        ws.Cells(tickercount, 10).Value = FormatNumber(lastclose - firstopen, 2)
                         'Format the result with Excel's "Number" format
                         ws.Cells(tickercount, 10).NumberFormat = "0.00"
                         
@@ -125,7 +132,7 @@ Sub Stocks():
                         'Calculate the Percentage Change using this formula: Percentage Change = ((last <close>/first <open>)-1)
                         'Format the result with Excel's "Percentage" format
                         'Print the result in the Percentage Change column of table one
-                        ws.Cells(tickercount, 11).Value = FormatPercent((ws.Cells(a, 6).Value / firstopen) - 1)
+                        ws.Cells(tickercount, 11).Value = FormatPercent((lastclose / firstopen) - 1)
                         
                             'If the Percentage Change is bigger than the current Greatest % Increase
                             If ws.Cells(tickercount, 11).Value > greatestincrease Then
