@@ -42,12 +42,12 @@ Sub Stocks():
         Dim tickercount As Long
         tickercount = 2
         
-        'Store the sum of the volume for the current <ticker>
+        'Store the <vol> sum for the current <ticker>
         'This variable needs to be a Double or the value will overflow since stock volume is a very large integer
         Dim volsum As Double
         volsum = 0
         
-        'Store the value of the first <open>
+        'Store the value of the first <open> for the current <ticker>
         Dim firstopen As Double
         firstopen = Cells(2, 3).Value
         
@@ -78,7 +78,7 @@ Sub Stocks():
             'Loop through the rows
             For a = 2 To rowcount
         
-                'Add the <vol> of the current row to volume sum
+                'Add the <vol> of the current row to <vol> sum
                 volsum = volsum + Cells(a, 7).Value
             
                 'If the current <ticker> is not the same as the next <ticker>
@@ -87,9 +87,11 @@ Sub Stocks():
                     'Print the current <ticker> in the Ticker column of table one
                     Cells(tickercount, 9).Value = Cells(a, 1).Value
                     
-                    'Print the (last <close> - first <open>) in the Yearly Change column of table one and give it two decimal places
+                    'Calculate the Yearly Change using this formla:  Yearly Change = (last <close> - first <open>)
+                    'Format the result by giving it two decimal places
+                    'Print the result in the Yearly Change column of table one
                     Cells(tickercount, 10).Value = FormatNumber(Cells(a, 6).Value - firstopen, 2)
-                    'Format the value to have Excel's "Number" format
+                    'Format the result with Excel's "Number" format
                     Cells(tickercount, 10).NumberFormat = "0.00"
                     
                         'If the Yearly Change is positive
@@ -106,47 +108,49 @@ Sub Stocks():
                 
                         End If
                     
-                    'Print the ((last <close>/first <open>)-1) in the Percentage Change column
+                    'Calculate the Percentage Change using this formula: Percentage Change = ((last <close>/first <open>)-1)
+                    'Format the result with Excel's "Percentage" format
+                    'Print the result in the Percentage Change column of table one
                     Cells(tickercount, 11).Value = FormatPercent((Cells(a, 6).Value / firstopen) - 1)
                     
-                        'If the next Percentage Change is bigger than the current biggest Percentage Change
+                        'If the Percentage Change is bigger than the current Greatest % Increase
                         If Cells(tickercount, 11).Value > greatestincrease Then
                         
-                            'Store the value of the bigger Percentage Change
+                            'Store that Percentage Change as the new Greatest % Increase
                             greatestincrease = Cells(tickercount, 11).Value
                             
-                            'Store the Ticker with the bigger Percentage Change
+                            'Store the Ticker associated with that Percentage Change
                             tickerincrease = Cells(tickercount, 9).Value
                         
-                        'But if the next Percentage Change is smaller than the current smallest Percentage Change
+                        'But if the next Percentage Change is smaller than the current Greatest % Decrease
                         ElseIf Cells(tickercount, 11).Value < greatestdecrease Then
                         
-                            'Store the value of the smaller Percentage Change
+                            'Store that Percentage Change as the new Greatest % Decrease
                             greatestdecrease = Cells(tickercount, 11).Value
                             
-                            'Store the Ticker with the smaller Percentage Change
+                            'Store the Ticker associated with that Percentage Change
                             tickerdecrease = Cells(tickercount, 9).Value
             
                         End If
                     
-                    'Print the volume sum in the Total Stock Volume Column
+                    'Print the <vol> sum in the Total Stock Volume column of table one
                     Cells(tickercount, 12).Value = volsum
                     
-                        'If the volume sum that was just printed is bigger than the current biggest Total Stock Volume
+                        'If the <vol> sum that was just printed is bigger than the current Greatest Total Volume
                         If Cells(tickercount, 12).Value > greatestvol Then
                         
-                            'Store the value of that volume sum as the new biggest Total Stock Volume
+                            'Store the value of that <vol> sum as the new Greatest Total Volume
                             greatestvol = Cells(tickercount, 12).Value
                             
-                            'Store the ticker associated with that volume sum
+                            'Store the ticker associated with that <vol> sum
                             tickervol = Cells(tickercount, 9).Value
             
                         End If
                         
-                    'Set the firstopen variable to the first <open> of the new symbol
+                    'Store the first <open> of the new <ticker>
                     firstopen = Cells(a + 1, 3).Value
                     
-                    'Reset the volume sum
+                    'Reset the <vol> sum
                     volsum = 0
                     
                     'Shift down by one row in table one
