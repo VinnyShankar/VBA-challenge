@@ -27,12 +27,14 @@ Sub Reset():
 End Sub
 Sub Stocks():
 
+'Print two new tables on each sheet to summarize that sheet's stock data
+
     ' --------------------------------------------
     ' LOOP THROUGH ALL SHEETS
     ' --------------------------------------------
     For Each ws In Worksheets
 
-        'Print the column labels for table one
+        'Print the headers for table one
         
             'Print the Ticker column label
             ws.Range("I1").Value = "Ticker"
@@ -45,9 +47,29 @@ Sub Stocks():
             
             'Print the Total Stock Volume column label
             ws.Range("L1").Value = "Total Stock Volume"
+            
+        'Print the headers for table two
+            
+            'Print the header for the Ticker column
+            ws.Range("Q1").Value = "Ticker"
+            
+            'Print the header for the Value column
+            ws.Range("R1").Value = "Value"
+            
+            'Print the header for the Greatest % Increase row
+            ws.Range("P2").Value = "Greatest % Increase"
+            
+            'Print the header for the Greatest % Decrease row
+            ws.Range("P3").Value = "Greatest % Decrease"
+            
+            'Print the header for the Greatest Total Volume row
+            ws.Range("P4").Value = "Greatest Total Volume"
+            
+            'Auto adjust the width of the row headers
+            ws.Columns("P").AutoFit
         
         'Populate table one
-        
+                  
             'Count the number of rows in the dataset
             Dim rowcount As Long
             rowcount = ws.Cells(Rows.Count, 1).End(xlUp).Row
@@ -56,8 +78,12 @@ Sub Stocks():
             Dim tickercount As Long
             tickercount = 2
             
+            'Store the current <ticker>
+            Dim currentticker As String
+            currentticker = ws.Cells(2, 1).Value
+            
             'Store the <vol> sum for the current <ticker>
-            'This variable needs to be a Double or the value will overflow since stock volume is a very large integer
+            'This variable needs to have data type LongLong or the value will overflow; use of LongLong requires Excel 64-bit
             Dim volsum As LongLong
             volsum = 0
             
@@ -100,10 +126,13 @@ Sub Stocks():
                     volsum = volsum + ws.Cells(a, 7).Value
                 
                     'If the current <ticker> is not the same as the next <ticker>
-                    If ws.Cells(a, 1).Value <> ws.Cells(a + 1, 1).Value Then
+                    If currentticker <> ws.Cells(a + 1, 1).Value Then
         
                         'Print the current <ticker> in the Ticker column of table one
-                        ws.Cells(tickercount, 9).Value = ws.Cells(a, 1).Value
+                        ws.Cells(tickercount, 9).Value = currentticker
+                        
+                        'Update the current <ticker>
+                        currentticker = ws.Cells(a + 1, 1).Value
                         
                         'Store the last <close> of the current <ticker>
                         lastclose = ws.Cells(a, 6).Value
@@ -183,26 +212,6 @@ Sub Stocks():
                 
             'Auto adjust the width of the columns in table one
             ws.Columns("J:L").AutoFit
-            
-        'Print the column labels and row labels for table two
-            
-            'Print the Ticker column label
-            ws.Range("Q1").Value = "Ticker"
-            
-            'Print the Value column label
-            ws.Range("R1").Value = "Value"
-            
-            'Print the Greatest & Increase row label
-            ws.Range("P2").Value = "Greatest % Increase"
-            
-            'Print the Greatest & Decrease row label
-            ws.Range("P3").Value = "Greatest % Decrease"
-            
-            'Print the Greatest Total Volume row label
-            ws.Range("P4").Value = "Greatest Total Volume"
-            
-            'Auto adjust the width of the column with the row labels in table two
-            ws.Columns("P").AutoFit
             
         'Populate table two
             
