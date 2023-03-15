@@ -2,7 +2,7 @@ Attribute VB_Name = "Module1"
 Sub Reset():
 
     ' --------------------------------------------
-    ' LOOP THROUGH ALL SHEETS IN THE WORKBOOK
+    ' LOOP THROUGH ALL SHEETS
     ' --------------------------------------------
     For Each ws In Worksheets
 
@@ -10,15 +10,14 @@ Sub Reset():
     
         'Clear the cells
         ws.Columns("I:L").Clear
-        ws.Columns("P:R").Clear
+        ws.Columns("O:Q").Clear
         
         'Reset the widths of the columns
         ws.Columns("J:L").ColumnWidth = 8.43
-        ws.Columns("P").ColumnWidth = 8.43
+        ws.Columns("O").ColumnWidth = 8.43
         
         'Remove the number formats
         ws.Range("J2:J91").ClearFormats
-        ws.Range("R2:R3").ClearFormats
     
     Next ws
     
@@ -30,7 +29,7 @@ Sub Stocks():
 'Print two new tables on each sheet to summarize that sheet's stock data
 
     ' --------------------------------------------
-    ' LOOP THROUGH ALL SHEETS IN THE WORKBOOK
+    ' LOOP THROUGH ALL SHEETS
     ' --------------------------------------------
     For Each ws In Worksheets
 
@@ -51,22 +50,22 @@ Sub Stocks():
         'Print the headers for table two
             
             'Print the header for the Ticker column
-            ws.Range("Q1").Value = "Ticker"
+            ws.Range("P1").Value = "Ticker"
             
             'Print the header for the Value column
-            ws.Range("R1").Value = "Value"
+            ws.Range("Q1").Value = "Value"
             
             'Print the header for the Greatest % Increase row
-            ws.Range("P2").Value = "Greatest % Increase"
+            ws.Range("O2").Value = "Greatest % Increase"
             
             'Print the header for the Greatest % Decrease row
-            ws.Range("P3").Value = "Greatest % Decrease"
+            ws.Range("O3").Value = "Greatest % Decrease"
             
             'Print the header for the Greatest Total Volume row
-            ws.Range("P4").Value = "Greatest Total Volume"
+            ws.Range("O4").Value = "Greatest Total Volume"
             
             'Auto adjust the width of the row headers
-            ws.Columns("P").AutoFit
+            ws.Columns("O").AutoFit
         
         'Populate table one
                   
@@ -78,7 +77,7 @@ Sub Stocks():
             Dim tickercount As Long
             tickercount = 2
             
-            'Store the current <ticker>
+            'Store the current <ticker> from the dataset
             Dim currentticker As String
             currentticker = ws.Cells(2, 1).Value
             
@@ -95,23 +94,23 @@ Sub Stocks():
             Dim lastclose As Double
             lastclose = 0
             
-            'Store the value of the Greatest % Increase
+            'Store the Greatest % Increase
             Dim greatestincrease As Double
             greatestincrease = 0
             
-            'Store the ticker with the Greatest % Increase
+            'Store the Ticker with the Greatest % Increase
             Dim tickerincrease As String
             tickerincrease = 0
             
-            'Store the value of the Greatest % Decrease
+            'Store the Greatest % Decrease
             Dim greatestdecrease As Double
             greatestdecrease = 0
             
-            'Store the ticker with the Greatest % Decrease
+            'Store the Ticker with the Greatest % Decrease
             Dim tickerdecrease As String
             tickerdecrease = 0
             
-            'Store the value of the Greatest Total Volume
+            'Store the Greatest Total Volume
             Dim greatestvol As LongLong
             greatestvol = 0
             
@@ -131,12 +130,9 @@ Sub Stocks():
                         'Print the current <ticker> in the Ticker column of table one
                         ws.Cells(tickercount, 9).Value = currentticker
                         
-                        'Update the current <ticker>
-                        currentticker = ws.Cells(a + 1, 1).Value
-                        
                         'Store the last <close> of the current <ticker>
                         lastclose = ws.Cells(a, 6).Value
-                        
+                                              
                         'Calculate the Yearly Change using this formla:  Yearly Change = (last <close> - first <open>)
                         'Format the result by giving it two decimal places
                         'Print the result in the Yearly Change column of table one
@@ -144,13 +140,16 @@ Sub Stocks():
                         'Format the result with Excel's "Number" format
                         ws.Cells(tickercount, 10).NumberFormat = "0.00"
                         
+                        'Update the current <ticker>
+                        currentticker = ws.Cells(a + 1, 1).Value
+                        
                             'If the Yearly Change is positive
                             If ws.Cells(tickercount, 10).Value > 0 Then
                     
                                 'Fill the cell with a green color
                                 ws.Cells(tickercount, 10).Interior.ColorIndex = 4
                         
-                            'If the Yearly Change is negative
+                            'Else if the Yearly Change is negative
                             ElseIf ws.Cells(tickercount, 10).Value < 0 Then
                             
                                 'Fill the cell with a red color
@@ -172,7 +171,7 @@ Sub Stocks():
                                 'Store the Ticker associated with that Percentage Change
                                 tickerincrease = ws.Cells(tickercount, 9).Value
                             
-                            'But if the next Percentage Change is smaller than the current Greatest % Decrease
+                            'Else if the next Percentage Change is smaller than the current Greatest % Decrease
                             ElseIf ws.Cells(tickercount, 11).Value < greatestdecrease Then
                             
                                 'Store that Percentage Change as the new Greatest % Decrease
@@ -216,22 +215,22 @@ Sub Stocks():
         'Populate table two
             
             'Print the ticker with the Greatest % Increase
-            ws.Range("Q2").Value = tickerincrease
+            ws.Range("P2").Value = tickerincrease
             
             'Print the value of the Greatest % Increase
-            ws.Range("R2").Value = FormatPercent(greatestincrease)
+            ws.Range("Q2").Value = FormatPercent(greatestincrease)
             
             'Print the ticker with the Greatest % Decrease
-            ws.Range("Q3").Value = tickerdecrease
+            ws.Range("P3").Value = tickerdecrease
                 
             'Print the value of the Greatest % Decrease
-            ws.Range("R3").Value = FormatPercent(greatestdecrease)
+            ws.Range("Q3").Value = FormatPercent(greatestdecrease)
             
             'Print the ticker with the Greatest Total Volume
-            ws.Range("Q4").Value = tickervol
+            ws.Range("P4").Value = tickervol
             
             'Print the value of the Greatest Total Volume
-            ws.Range("R4").Value = greatestvol
+            ws.Range("Q4").Value = greatestvol
     
     Next ws
     
