@@ -2,7 +2,7 @@ Attribute VB_Name = "Module1"
 Sub Reset():
 
     ' --------------------------------------------
-    ' LOOP THROUGH ALL SHEETS
+    ' LOOP THROUGH ALL SHEETS IN THE WORKBOOK
     ' --------------------------------------------
     For Each ws In Worksheets
 
@@ -30,7 +30,7 @@ Sub Stocks():
 'Print two new tables on each sheet to summarize that sheet's stock data
 
     ' --------------------------------------------
-    ' LOOP THROUGH ALL SHEETS
+    ' LOOP THROUGH ALL SHEETS IN THE WORKBOOK
     ' --------------------------------------------
     For Each ws In Worksheets
 
