@@ -1,29 +1,4 @@
 Attribute VB_Name = "Module1"
-Sub Reset():
-
-    ' --------------------------------------------
-    ' LOOP THROUGH ALL SHEETS
-    ' --------------------------------------------
-    For Each ws In Worksheets
-
-    'Reset the worksheet to its original state
-    
-        'Clear the cells
-        ws.Columns("I:L").Clear
-        ws.Columns("O:Q").Clear
-        
-        'Reset the widths of the columns
-        ws.Columns("J:L").ColumnWidth = 8.43
-        ws.Columns("O").ColumnWidth = 8.43
-        
-        'Remove the number formats
-        ws.Range("J2:J91").ClearFormats
-    
-    Next ws
-    
-    MsgBox ("Reset complete.")
-
-End Sub
 Sub Stocks():
 
 'Print two new tables on each sheet to summarize that sheet's stock data
@@ -235,5 +210,32 @@ Sub Stocks():
     Next ws
     
     MsgBox ("Populate complete.")
+
+End Sub
+Sub Reset():
+
+'This subroutine is for testing purposes only. It resets all sheets in the Workbook back to their pre-populate state.
+
+    ' --------------------------------------------
+    ' LOOP THROUGH ALL SHEETS
+    ' --------------------------------------------
+    For Each ws In Worksheets
+
+    'Reset the worksheet to its original state
+    
+        'Clear the cells
+        ws.Columns("I:L").Clear
+        ws.Columns("O:Q").Clear
+        
+        'Reset the widths of the columns
+        ws.Columns("J:L").ColumnWidth = 8.43
+        ws.Columns("O").ColumnWidth = 8.43
+        
+        'Remove the number formats
+        ws.Range("J2:J91").ClearFormats
+    
+    Next ws
+    
+    MsgBox ("Reset complete.")
 
 End Sub
